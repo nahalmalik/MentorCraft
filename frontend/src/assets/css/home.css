@@ -1,0 +1,363 @@
+/* Header Styles */
+.header {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-logo span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.header-nav a {
+  color: white;
+  margin: 0 1rem;
+  text-decoration: none;
+}
+
+.header-nav a:hover {
+  color: #93c5fd;
+}
+
+.header-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Hero Section Styles */
+.hero-section {
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 4rem 1rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: darken;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-button {
+  background-color: #1e40af;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hero-button:hover {
+  background-color: #1e3a8a;
+}
+
+/* Feature Section Styles */
+.feature-section {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  color: #3b82f6;
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Course Section Styles */
+.course-section {
+  padding: 4rem 1rem;
+  background-color: #f3f4f6;
+  text-align: center;
+}
+
+.course-section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.course-section p {
+  margin-bottom: 1.5rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.course-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.course-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.course-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.course-button {
+  background-color: #1e40af;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.course-button:hover {
+  background-color: #1e3a8a;
+}
+
+/* Study Section Styles */
+.study-section {
+  padding: 4rem 1rem;
+  background-color: #1e3a8a;
+  color: white;
+  text-align: center;
+}
+
+.study-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.study-button {
+  background-color: #1e40af;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.study-button:hover {
+  background-color: #1e3a8a;
+}
+
+.study-pace h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  border: #facc15;  border-width: 2px;
+  padding: 0.5rem;
+
+}
+
+.study-pace-button {
+  background-color: #facc15;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.study-pace-button:hover {
+  background-color: #ca8a04;
+}
+
+/* Testimonial Section Styles */
+.testimonial-section {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.testimonial-section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card p {
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.testimonial-author img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.testimonial-author p {
+  font-weight: 600;
+}
+
+/* Newsletter Section Styles */
+.newsletter-section {
+  padding: 4rem 1rem;
+  background-color: #1e3a8a;
+  color: white;
+  text-align: center;
+}
+
+.newsletter-section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.newsletter-section p {
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-form {
+  display: flex;
+  justify-content: center;
+}
+
+.newsletter-form input {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.newsletter-form button {
+  background-color: #facc15;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0 0.25rem 0.25rem 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.newsletter-form button:hover {
+  background-color: #ca8a04;
+}
+
+/* Footer Styles */
+.footer {
+  padding: 2rem 1rem;
+  background-color: white;
+  text-align: center;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.footer-social a {
+  color: black;
+  text-decoration: none;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-copyright {
+
+  margin-top: 1rem;
+  margin-left: 41%;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .footer {
+    text-align: left;
+  }
+
+  .footer-social {
+    justify-content: flex-start;
+  }
+}
