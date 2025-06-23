@@ -1,102 +1,103 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../assets/css/TeacherDashboard.css';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import '../assets/css/MentorCraft.css';
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
-  const [instructor, setInstructor] = useState({ name: 'Loading...', id: null });
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/instructors/')
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Instructors API response:', data);
-        const loggedInInstructor = data.find((inst) => inst.email === 'test@example.com');
-        setInstructor(loggedInInstructor || { name: 'Unknown User', id: null });
-        if (loggedInInstructor && loggedInInstructor.id) {
-          fetch(`http://127.0.0.1:8000/api/courses/?instructor_id=${loggedInInstructor.id}`)
-            .then((response) => {
-              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-              return response.json();
-            })
-            .then((data) => {
-              console.log('My Courses API response:', data);
-              const coursesData = Array.isArray(data) ? data : data.results || [data];
-              console.log('Processed my courses:', coursesData);
-              setCourses(coursesData);
-            })
-            .catch((err) => console.error('Error fetching my courses:', err));
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/courses/all/');
+        const data = await response.json();
+        if (data.status === 'success') {
+          setCourses(data.courses);
+        } else {
+          setError(data.message);
         }
-      })
-      .catch((err) => console.error('Error fetching instructor:', err));
+      } catch (err) {
+        setError('Failed to fetch courses');
+      }
+    };
+    fetchCourses();
   }, []);
 
-  const handleLogout = () => {
-    navigate('/teacher/login');
-  };
-
-  const handleCourseClick = (courseId) => {
-    navigate(`/teacher/course/${courseId}`);
-    // Note: Implement course detail page if needed, currently just navigates
-  };
+  const displayedCourses = showAll ? courses : courses.slice(0, 4);
 
   return (
-    <div className="teacher-dashboard">
-      <div className="dashboard-header">
-        <h1 className="header-title">Mentor Craft</h1>
-        <div className="header-actions">
-          <button className="new-course-btn" onClick={() => navigate('/teacher/create-course')}>
-            New Course
-          </button>
-          <div className="user-profile">
-            <img src="https://via.placeholder.com/40" alt="User Profile" />
-            <span>Hello, {instructor.name}</span>
-          </div>
-        </div>
+    <motion.div
+      className="my-courses"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+   <div className="sidebar">
+        <div className="sidebar-logo">Mentor Craft</div>
+        <h2 className="sidebar-title">Teacher Dashboard</h2>
+        <nav className="sidebar-nav">
+          <Link to="/teacher-dashboard">Overview</Link>
+          <Link to="/create-course">Create Course</Link>
+          <Link to="/my-earnings">My Earnings</Link>
+          <Link to="/my-courses">My Courses</Link>
+          <Link to="/quizzes-assignments">Quizzes & Assignments</Link>
+          <Link to="/settings">Settings</Link>
+        </nav>
       </div>
-      <div className="dashboard-container">
-        <div className="sidebar">
-          <h3>Dashboard</h3>
-          <ul>
-            <li><a href="/teacher/dashboard">Overview</a></li>
-            <li><a href="/teacher/my-courses" className="active">My Courses</a></li>
-            <li><a href="/teacher/students">Students</a></li>
-            <li><a href="/teacher/settings">Settings</a></li>
-            <li><a href="/teacher/create-course">Create New Course</a></li>
-            <li><button className="logout-btn" onClick={handleLogout}>Logout</button></li>
-          </ul>
-        </div>
-        <div className="main-content">
-          <div className="courses-card">
-            <h3>My Courses</h3>
-            <div className="course-list">
-              {Array.isArray(courses) ? (
-                courses.map((course) => (
-                  <div key={course.id} className="course-item" onClick={() => handleCourseClick(course.id)}>
-                    {course.image_base64 && (
-                      <div className="course-image">
-                        <img src={`data:image/jpeg;base64,${course.image_base64}`} alt={course.title} />
-                      </div>
-                    )}
-                    <h4>{course.title}</h4>
-                    <p>{course.students || 0} Students</p>
-                    <div className="course-status">
-                      Enrolled: {course.students || 0} Students
-                    </div>
-                  </div>
-                ))
+      <div className="dashboard-content">
+        <motion.h1
+          align="center"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          My Courses
+        </motion.h1>
+        {error && <p className="error">{error}</p>}
+        <div className="course-list">
+          {displayedCourses.map((course, index) => (
+            <motion.div
+              key={course.id}
+              className="course-card"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+            >
+              {course.image ? (
+                <img
+                  src={`http://127.0.0.1:8000${course.image}`}
+                  alt={course.title}
+                  className="course-thumbnail"
+                />
               ) : (
-                <p>No courses available</p>
+                <div className="course-placeholder">No Image</div>
               )}
-            </div>
-          </div>
+              <h3>{course.title}</h3>
+              <p>{course.description.substring(0, 100)}...</p>
+              <p>Students Enrolled: {course.student_count}</p>
+              <Link to={`/course/${course.id}`} className="course-button">
+                View Details
+              </Link>
+            </motion.div>
+          ))}
         </div>
+        {courses.length > 4 && !showAll && (
+          <motion.button
+            className="show-more-btn"
+            onClick={() => setShowAll(true)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.3 }}
+          >
+            Show More
+          </motion.button>
+        )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

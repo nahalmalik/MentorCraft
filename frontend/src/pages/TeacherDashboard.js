@@ -1,257 +1,241 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../assets/css/TeacherDashboard.css';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import '../assets/css/MentorCraft.css';
 
 const TeacherDashboard = () => {
   const [courses, setCourses] = useState([]);
-  const [stats, setStats] = useState({ totalCourses: 0, activeStudents: 0, earnings: 0 });
-  const [instructor, setInstructor] = useState({ name: 'Loading...', id: null });
   const [queries, setQueries] = useState([]);
+  const [error, setError] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedQuery, setSelectedQuery] = useState(null);
-  const [answerForm, setAnswerForm] = useState(null);
-  const [answerText, setAnswerText] = useState('');
-  const navigate = useNavigate();
+  const [answerQuery, setAnswerQuery] = useState(null);
+  const [answerInput, setAnswerInput] = useState('');
+
+  // Random stats for demo
+  const stats = {
+    totalCourses: Math.floor(Math.random() * 5) + 1,
+    activeCourses: courses.length,
+    engagedStudents: Math.floor(Math.random() * 50) + 10,
+    totalEarnings: Math.floor(Math.random() * 5000) + 1000,
+  };
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/instructors/')
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Instructors API response:', data);
-        const loggedInInstructor = data.find((inst) => inst.email === 'test@example.com');
-        setInstructor(loggedInInstructor || { name: 'Unknown User', id: null });
-      })
-      .catch((err) => console.error('Error fetching instructor:', err));
+    const fetchData = async () => {
+      try {
+        const coursesRes = await fetch('http://127.0.0.1:8000/api/courses/all/');
+        const coursesData = await coursesRes.json();
+        console.log('Courses data:', coursesData);
+        if (coursesData.status === 'success') setCourses(coursesData.courses);
 
-    fetch('http://127.0.0.1:8000/api/courses/')
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Courses API response:', data);
-        const coursesData = Array.isArray(data) ? data : data.results || [data];
-        console.log('Processed coursesData:', coursesData);
-        if (!Array.isArray(coursesData)) {
-          console.error('Courses data is not an array:', coursesData);
-          setCourses([]);
-        } else {
-          setCourses(coursesData);
-          setStats({
-            totalCourses: coursesData.length,
-            activeStudents: coursesData.reduce((sum, course) => sum + (course.students || 0), 0),
-            earnings: coursesData.length * 100,
-          });
-        }
-      })
-      .catch((err) => console.error('Error fetching courses:', err));
-
-    fetch('http://127.0.0.1:8000/api/students/')
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Students API response:', data);
-        const sampleQueries = Array.isArray(data) ? data.filter(q => q.course__title) : (data.results || [data]).filter(q => q.course__title);
-        console.log('Processed queries:', sampleQueries);
-        setQueries(sampleQueries);
-      })
-      .catch((err) => console.error('Error fetching queries:', err));
+        const queriesRes = await fetch('http://127.0.0.1:8000/api/students/my_queries/');
+        const queriesData = await queriesRes.json();
+        console.log('Queries data:', queriesData);
+        if (queriesData.status === 'success') setQueries(queriesData.queries);
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError('Failed to load data');
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleLogout = () => {
-    navigate('/teacher/login');
-  };
-
-  const handleCourseClick = (courseId) => {
-    fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Selected course data:', data);
-        setSelectedCourse(data);
-        setSelectedQuery(null);
-        setAnswerForm(null);
-      })
-      .catch((err) => console.error('Error fetching course details:', err));
-  };
-
-  const handleQueryClick = (queryId) => {
-    fetch(`http://127.0.0.1:8000/api/students/${queryId}/`)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        setSelectedQuery(data);
-        setSelectedCourse(null);
-        setAnswerForm(null);
-      })
-      .catch((err) => console.error('Error fetching query details:', err));
-  };
-
-  const handleNewCourse = () => {
-    alert('New course creation form will open here!');
-  };
-
-  const closeDetails = () => {
-    setSelectedCourse(null);
-    setSelectedQuery(null);
-    setAnswerForm(null);
-  };
-
-  const handleAnswer = (queryId) => {
-    const query = queries.find(q => q.id === queryId);
-    if (query) {
-      setAnswerForm(query);
-      setAnswerText('');
+  const handleAnswerSubmit = async (e) => {
+    e.preventDefault();
+    if (!answerInput || !answerQuery) {
+      setError('Answer is required');
+      return;
     }
-  };
 
-  const handleDeny = (queryId) => {
-    if (window.confirm(`Are you sure you want to deny and remove query ${queryId}?`)) {
-      setQueries(queries.filter(q => q.id !== queryId));
-      setSelectedQuery(null);
-      setAnswerForm(null);
-    }
-  };
-
-  const handleSubmitAnswer = () => {
-    if (answerForm && answerText.trim()) {
-      alert(`Answer "${answerText}" submitted for query ${answerForm.id}. To be delivered to student dashboard.`);
-      setAnswerForm(null);
-      setAnswerText('');
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/students/answer_query/${answerQuery.id}/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answer: answerInput }),
+      });
+      const data = await response.json();
+      console.log('Answer response:', data);
+      if (data.status === 'success') {
+        setQueries(queries.map((q) => (q.id === answerQuery.id ? { ...q, answer: answerInput } : q)));
+        setAnswerQuery(null);
+        setAnswerInput('');
+        setError('');
+      } else {
+        setError(data.message || 'Failed to submit answer');
+      }
+    } catch (err) {
+      console.error('Answer submission error:', err);
+      setError('Failed to submit answer');
     }
   };
 
   return (
-    <div className="teacher-dashboard">
-      <div className="dashboard-header">
-        <h1 className="header-title">Mentor Craft</h1>
-        <div className="header-actions">
-          <button className="new-course-btn" onClick={handleNewCourse}>
-            New Course
-          </button>
-            <span>Hello, {instructor.name}</span>
-        </div>
+    <motion.div
+      className="teacher-dashboard"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="sidebar">
+        <div className="sidebar-logo">Mentor Craft</div>
+        <h2 className="sidebar-title">Teacher Dashboard</h2>
+        <nav className="sidebar-nav">
+          <Link to="/teacher-dashboard">Overview</Link>
+          <Link to="/create-course">Create Course</Link>
+          <Link to="/my-earnings">My Earnings</Link>
+          <Link to="/my-courses">My Courses</Link>
+          <Link to="/quizzes-assignments">Quizzes & Assignments</Link>
+          <Link to="/settings">Settings</Link>
+        </nav>
       </div>
-      <div className="dashboard-container">
-        <div className="sidebar">
-          <h3>Dashboard</h3>
-          <ul>
-            <li><a href="/teacher/dashboard" className="active">Overview</a></li>
-            <li><a href="/teacher/my-courses">My Courses</a></li>
-            <li><a href="/teacher/create-course">Create New Course</a></li>
-            <li><a href="/teacher/students">Students</a></li>
-            <li><a href="/teacher/settings">Settings</a></li>
-            <li><button className="logout-btn" onClick={handleLogout}>Logout</button></li>
-          </ul>
+      <div className="dashboard-content">
+        <h1>Teacher Dashboard</h1>
+        {error && <p className="error">{error}</p>}
+        <div className="stats-grid">
+          <motion.div className="stat-box" whileHover={{ scale: 1.05 }}>
+            <h3>Active Courses</h3>
+            <p>{stats.activeCourses}</p>
+          </motion.div>
+          <motion.div className="stat-box" whileHover={{ scale: 1.05 }}>
+            <h3>Total Courses</h3>
+            <p>{stats.totalCourses}</p>
+          </motion.div>
+          <motion.div className="stat-box" whileHover={{ scale: 1.05 }}>
+            <h3>Engaged Students</h3>
+            <p>{stats.engagedStudents}</p>
+          </motion.div>
+          <motion.div className="stat-box" whileHover={{ scale: 1.05 }}>
+            <h3>Total Earnings</h3>
+            <p>${stats.totalEarnings}</p>
+          </motion.div>
         </div>
-        <div className="main-content">
-          <div className="stats-card">
-            <div className="stat-card">
-              <h4>Total Courses</h4>
-              <p>{stats.totalCourses}</p>
-            </div>
-            <div className="stat-card">
-              <h4>Active Students</h4>
-              <p>{stats.activeStudents}</p>
-            </div>
-            <div className="stat-card">
-              <h4>Earnings</h4>
-              <p>${stats.earnings}</p>
-            </div>
-          </div>
-          <div className="courses-card">
-            <h3>My Courses</h3>
-            <div className="course-list">
-              {Array.isArray(courses) ? (
-                courses.map((course) => (
-                  <div key={course.id} className="course-item" onClick={() => handleCourseClick(course.id)}>
-                    {course.image_base64 && (
-                      <div className="course-image">
-                        <img src={`data:image/jpeg;base64,${course.image_base64}`} alt={course.title} />
-                      </div>
-                    )}
-                    <h4>{course.title}</h4>
-                    <p>{course.students || 0} Students</p>
-                    <div className="course-status">
-                      Enrolled: {course.students || 0} Students
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No courses available</p>
-              )}
-            </div>
-            {selectedCourse && (
-              <div className="course-details show">
-                <button className="details-close" onClick={closeDetails}>×</button>
-                <h3>{selectedCourse.title}</h3>
-                <div className="course-video">
-                  {selectedCourse.video_base64 && (
-                    <video controls>
-                      <source src={`data:video/mp4;base64,${selectedCourse.video_base64}`} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                </div>
-                <p>{selectedCourse.description}</p>
-                <p>Students: {selectedCourse.students}</p>
-                <p>Created: {new Date(selectedCourse.created_at).toLocaleDateString()}</p>
-              </div>
-            )}
-          </div>
-          <div className="queries-card">
-            <h3>Student Queries</h3>
-            <div className="query-list">
-              {Array.isArray(queries) ? (
-                queries.map((query) => (
-                  <div key={query.id} className="query-item" onClick={() => handleQueryClick(query.id)}>
-                    <h4>{query.title}</h4>
-                    <p>By: {query.student__name}</p>
-                    <div className="query-actions">
-                      <button className="answer-btn" onClick={(e) => { e.stopPropagation(); handleAnswer(query.id); }}>Answer</button>
-                      <button className="deny-btn" onClick={(e) => { e.stopPropagation(); handleDeny(query.id); }}>Deny</button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No queries available</p>
-              )}
-            </div>
-            {selectedQuery && (
-              <div className="query-details show">
-                <button className="details-close" onClick={closeDetails}>×</button>
-                <h3>{selectedQuery.title}</h3>
-                <p>Student: {selectedQuery.student__name}</p>
-                <p>Course: {selectedQuery.course__title}</p>
-                <p>Created: {new Date(selectedQuery.created_at).toLocaleDateString()}</p>
-              </div>
-            )}
-          </div>
-          {answerForm && (
-            <div className="answer-form show">
-              <button className="details-close" onClick={closeDetails}>×</button>
-              <h3>Answer Query</h3>
-              <p><strong>Question:</strong> {answerForm.title}</p>
-              <textarea
-                value={answerText}
-                onChange={(e) => setAnswerText(e.target.value)}
-                placeholder="Type your answer here..."
-              />
-              <button className="submit-btn" onClick={handleSubmitAnswer}>Submit</button>
-            </div>
+        <h2>My Courses</h2>
+        <div className="courses-grid">
+          {courses.length === 0 ? (
+            <p>No courses available</p>
+          ) : (
+            courses.map((course) => (
+              <motion.div
+                key={course.id}
+                className="course-card"
+                whileHover={{ scale: 1.05, boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }}
+                onClick={() => setSelectedCourse(course)}
+              >
+                {course.image ? (
+                  <img src={course.image} alt={course.title} className="course-thumbnail" />
+                ) : (
+                  <div className="course-placeholder">No Image</div>
+                )}
+                <h3>{course.title}</h3>
+              </motion.div>
+            ))
+          )}
+        </div>
+        <h2>Student Queries</h2>
+        <div className="queries-grid">
+          {queries.length === 0 ? (
+            <p>No queries available</p>
+          ) : (
+            queries.map((query) => (
+              <motion.div
+                key={query.id}
+                className="query-box"
+                whileHover={{ scale: 1.05 }}
+                onClick={() => setSelectedQuery(query)}
+              >
+                <h3>{query.title}</h3>
+                <button className="answer-btn" onClick={(e) => { e.stopPropagation(); setAnswerQuery(query); }}>
+                  Answer
+                </button>
+              </motion.div>
+            ))
           )}
         </div>
       </div>
-    </div>
+      <AnimatePresence>
+        {selectedCourse && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedCourse(null)}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close" onClick={() => setSelectedCourse(null)}>×</button>
+              <h2>{selectedCourse.title}</h2>
+              <p>{selectedCourse.description}</p>
+              {selectedCourse.image && <img src={selectedCourse.image} alt={selectedCourse.title} className="modal-image" />}
+              {selectedCourse.video && (
+                <video controls className="modal-video">
+                  <source src={selectedCourse.video} type="video/mp4" />
+                </video>
+              )}
+              <p>Students: {selectedCourse.student_count}</p>
+            </motion.div>
+          </motion.div>
+        )}
+        {selectedQuery && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedQuery(null)}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close" onClick={() => setSelectedQuery(null)}>×</button>
+              <h2>{selectedQuery.title}</h2>
+              <p>{selectedQuery.content}</p>
+              <p>Course: {selectedQuery.course_title}</p>
+              <p>Answer: {selectedQuery.answer || 'No answer yet'}</p>
+            </motion.div>
+          </motion.div>
+        )}
+        {answerQuery && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setAnswerQuery(null)}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close" onClick={() => setAnswerQuery(null)}>×</button>
+              <h2>Answer Query: {answerQuery.title}</h2>
+              <form onSubmit={handleAnswerSubmit}>
+                <textarea
+                  value={answerInput}
+                  onChange={(e) => setAnswerInput(e.target.value)}
+                  placeholder="Enter your answer"
+                  required
+                  className="answer-textarea"
+                />
+                <button type="submit" className="submit-btn">Submit Answer</button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

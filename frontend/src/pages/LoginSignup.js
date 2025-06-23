@@ -1,92 +1,79 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import '../assets/css/LoginSignup.css';
 
-const LoginSignup = ({ isLogin }) => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+const LoginSignup = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const url = `http://127.0.0.1:8000/api/instructors/${isLogin ? 'login/' : 'signup/'}`;
-    console.log('Fetching:', url, 'with data:', formData);
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken'), // Add CSRF token
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        console.log('Response status:', response.status);
-        if (!response.ok) {
-          return response.json().then((data) => {
-            throw new Error(data.message || `HTTP error! Status: ${response.status}`);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status === 'success') {
-          // Store token or user ID (assuming backend returns it)
-          localStorage.setItem('instructorToken', data.token || data.id); // Adjust based on backend response
-          navigate('/teacher/dashboard');
-        } else {
-          throw new Error(data.message || 'Operation failed');
-        }
-      })
-      .catch((err) => {
-        console.error('Fetch error:', err);
-        setError(err.message || 'Network error or invalid credentials');
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/instructors/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+      const data = await response.json();
+      if (data.status === 'success') {
+        localStorage.setItem('userEmail', email);
+        navigate('/teacher-dashboard');
+      } else {
+        setError(data.message);
+      }
+    } catch (err) {
+      setError('Login failed');
+    }
   };
 
-  // Utility function to get CSRF token
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
   return (
-    <div className="login-signup">
+    <motion.div
+      className="login-signup"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <header className="header">
+        <div className="header-logo">
+          <span>Mentor Craft</span>
+        </div>
+        <nav className="header-nav">
+          <Link to="/">Home</Link>
+          <Link to="/courses">All Courses</Link>
+          <Link to="/contact">Contact</Link>
+        </nav>
+      </header>
       <div className="login-signup-form">
-        <h1>{isLogin ? 'Teacher Login' : 'Teacher Signup'}</h1>
+        <h1>Teacher Login</h1>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <input
             type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">{isLogin ? 'Login' : 'Signup'}</button>
+          <button type="submit">Login</button>
         </form>
-        <a href={isLogin ? '/teacher/signup' : '/teacher/login'} className="toggle-link">
-          {isLogin ? 'Need an account? Signup' : 'Already have an account? Login'}
-        </a>
+        <p>
+          Don't have an account?{' '}
+          <Link to="/login" className="toggle-link">
+            Register
+          </Link>
+        </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

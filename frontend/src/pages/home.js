@@ -1,4 +1,6 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import '../assets/css/home.css';
 
 // Import images
@@ -11,221 +13,354 @@ import eddie from '../assets/images/eddie.png';
 import jonathan from '../assets/images/jonathan.png';
 import laila from '../assets/images/laila.png';
 
-const Header = () => (
-  <header className="header">
-    <div className="header-logo">
-      <span>MENTOR CRAFT</span>
-    </div>
-    <nav className="header-nav">
-      <Link to="/">Home</Link>
-      <Link to="/courses">All Courses</Link>
-     <div className="dropdown">
-  <span>Instructor</span>
-  <select onChange={(e) => (window.location.href = e.target.value)}>
-    <option value="">Select</option>
-    <option value="/teacher/login">Login</option>
-    <option value="/teacher/signup">Signup</option>
-  </select>
-</div>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <Link to="/login">
-      <button className="header-button">Start Learning</button>
-    </Link>
-  </header>
-);
-
-const HeroSection = () => (
-  <section className="hero-section" style={{ backgroundImage: `url(${heroBg})` }}>
-    <h1>"Learning never exhausts the mind."</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pellentesque. Duis estestas nunc.</p>
-    <Link to="/courses">
-      <button className="hero-button">View All Courses</button>
-    </Link>
-  </section>
-);
-
-const FeatureSection = () => (
-  <section className="feature-section">
-    <div className="feature-grid">
-      <div className="feature-card">
-        <svg className="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-          <path fillRule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" clipRule="evenodd" />
-        </svg>
-        <h3>Actionable Training</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-      </div>
-      <div className="feature-card">
-        <svg className="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-          <path fillRule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" clipRule="evenodd" />
-        </svg>
-        <h3>Interesting Quizzes</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-      </div>
-      <div className="feature-card">
-        <svg className="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-          <path fillRule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" clipRule="evenodd" />
-        </svg>
-        <h3>Premium Material</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-      </div>
-    </div>
-  </section>
-);
-
-const CourseSection = () => (
-  <section className="course-section">
-    <h2>Our Most Popular Courses</h2>
-    <p>Lorem ipsum tempor incididunt ut labore et dolore magna aliqua.</p>
-    <div className="course-grid">
-      <div className="course-card">
-        <img src={course1} alt="Course 1" />
-        <h3>Java</h3>
-        <p>Java is a powerful and versatile programming language widely used in software development, web applications, mobile apps, and enterprise systems.</p>
-        <Link to="/CourseDetails">
-          <button className="course-button">See More...</button>
-        </Link>
-      </div>
-      <div className="course-card">
-        <img src={course2} alt="Course 2" />
-        <h3>Course Name</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <button className="course-button">See More...</button>
-      </div>
-      <div className="course-card">
-        <img src={course3} alt="Course 3" />
-        <h3>Course Name</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <button className="course-button">See More...</button>
-      </div>
-    </div>
-  </section>
-);
-
-const StudySection = () => (
-  <section className="study-section">
-    <div className="study-grid">
-      <div>
-        <button className="study-button">Experience</button>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <button className="study-button">See More...</button>
-      </div>
-      <div>
-        <button className="study-button">Education</button>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <button className="study-button">See More...</button>
-      </div>
-      <div>
-        <button className="study-button">Certificate</button>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <button className="study-button">See More...</button>
-      </div>
-      <div className="study-pace">
-        <h3>Study at your own pace</h3>
-        <p>Boost your career by learning skills in high demand</p>
-        <Link to="/login">
-          <button className="study-pace-button">Get Started</button>
-        </Link>
-      </div>
-    </div>
-  </section>
-);
-
-const TestimonialSection = () => (
-  <section className="testimonial-section">
-    <h2>Student Testimonials</h2>
-    <div className="testimonial-grid">
-      <div className="testimonial-card">
-        <p>"Massa amet, dolor tellus pellentesque eaquean in eget massa incididunt habitea."</p>
-        <div className="testimonial-author">
-          <img src={emma} alt="Emma Hart" />
-          <p>Emma Hart</p>
-        </div>
-      </div>
-      <div className="testimonial-card">
-        <p>"Massa amet, dolor tellus pellentesque eaquean in eget massa incididunt habitea."</p>
-        <div className="testimonial-author">
-          <img src={eddie} alt="Eddie Johnson" />
-          <p>Eddie Johnson</p>
-        </div>
-      </div>
-      <div className="testimonial-card">
-        <p>"Massa amet, dolor tellus pellentesque eaquean in eget massa incididunt habitea."</p>
-        <div className="testimonial-author">
-          <img src={jonathan} alt="Jonathan Doe" />
-          <p>Jonathan Doe</p>
-        </div>
-      </div>
-      <div className="testimonial-card">
-        <p>"Massa amet, dolor tellus pellentesque eaquean in eget massa incididunt habitea."</p>
-        <div className="testimonial-author">
-          <img src={laila} alt="Laila Lauway" />
-          <p>Laila Lauway</p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-const NewsletterSection = () => (
-  <section className="newsletter-section">
-    <h2>Join Our Community</h2>
-    <p>Enter your email address to register to our Newsletter subscription delivered on regular basis</p>
-    <div className="newsletter-form">
-      <input type="email" placeholder="Enter Your Email" />
-      <button>Subscribe</button>
-    </div>
-  </section>
-);
-
-const Footer = () => (
-  <footer className="footer">
-    <div className="footer-grid">
-      <div>
-        <p className="footer-title">MENTOR CRAFT</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sacpit elit.</p>
-        <div className="footer-social">
-          <a href="#"><i className="fab fa-facebook-f"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-vimeo-v"></i></a>
-        </div>
-      </div>
-      <div>
-        <p className="footer-title">Popular Courses</p>
-        <ul>
-          <li>1. Course no 1</li>
-          <li>2. Course no 2</li>
-          <li>3. Course no 3</li>
-          <li>4. Course no 4</li>
-          <li>5. Course no 5</li>
-        </ul>
-      </div>
-      <div>
-        <p className="footer-title">Contact Info</p>
-        <p>Phone: ____</p>
-        <p>Email: abc@xyz.com</p>
-      </div>
-    </div>
-    <p className="footer-copyright">Copyright © Mentor-Craft Team</p>
-  </footer>
-);
-
 const Home = () => {
   return (
-    <div>
-      <Header />
-      <HeroSection />
-      <FeatureSection />
-      <CourseSection />
-      <StudySection />
-      <TestimonialSection />
-      <NewsletterSection />
-      <Footer />
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="home-container"
+    >
+      <header className="header">
+        <div className="header-logo">
+          <span>Mentor Craft</span>
+        </div>
+        <nav className="header-nav">
+          <Link to="/">Home</Link>
+          <Link to="/courses">All Courses</Link>
+          <Link to="/contact">Contact</Link>
+        </nav>
+        <div>
+          <Link to="/student-dashboard">
+            <button className="header-button start-learning">Start Learning</button>
+          </Link>
+          <Link to="/teacher-dashboard">
+            <button className="header-button instructor">Instructor</button>
+          </Link>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="hero-section" style={{ backgroundImage: `url(${heroBg})` }}>
+        <motion.h1
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+          style={{ color: 'white' }}
+        >
+          "Learning never exhausts the mind."
+        </motion.h1>
+        <motion.p
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+        >
+          Discover a world of courses taught by expert instructors.
+        </motion.p>
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
+        >
+          <Link to="/courses" className="hero-button">
+            Explore Courses
+          </Link>
+        </motion.div>
+      </section>
+
+      {/* Feature Section */}
+      <section className="feature-section">
+        <motion.h2
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+        >
+          Why Choose Mentor Craft?
+        </motion.h2>
+        <div className="feature-grid">
+          <motion.div 
+            className="feature-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <div className="feature-icon">📚</div>
+            <h3>Actionable Training</h3>
+            <p>Practical skills for immediate career impact.</p>
+          </motion.div>
+          <motion.div 
+            className="feature-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <div className="feature-icon">🧠</div>
+            <h3>Engaging Quizzes</h3>
+            <p>Interactive assessments to boost learning.</p>
+          </motion.div>
+          <motion.div 
+            className="feature-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <div className="feature-icon">💎</div>
+            <h3>Premium Content</h3>
+            <p>Top-tier material from industry leaders.</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Course Section */}
+      <section className="course-section">
+        <motion.h2
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+        >
+          Explore Our Popular Courses
+        </motion.h2>
+        <motion.p
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+        >
+          Find courses tailored to your goals.
+        </motion.p>
+        <div className="course-grid">
+          <motion.div 
+            className="course-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <img src={course1} alt="Java Course" />
+            <h3>Java Programming</h3>
+            <p>Master Java fundamentals and applications.</p>
+            <Link to="/course/java">
+              <button className="course-button">Learn More</button>
+            </Link>
+          </motion.div>
+          <motion.div 
+            className="course-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <img src={course2} alt="Web Development Course" />
+            <h3>Web Development</h3>
+            <p>Build modern sites with HTML, CSS, JS.</p>
+            <Link to="/course/web-development">
+              <button className="course-button">Learn More</button>
+            </Link>
+          </motion.div>
+          <motion.div 
+            className="course-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <img src={course3} alt="Data Science Course" />
+            <h3>Data Science</h3>
+            <p>Master data analysis with Python and ML.</p>
+            <Link to="/course/data-science">
+              <button className="course-button">Learn More</button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Study Section */}
+      <section className="study-section">
+        <div className="study-grid">
+          <motion.div 
+            className="study-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <button className="study-button">Experience</button>
+            <p>Learn from seasoned industry pros.</p>
+            <Link to="/courses"><button className="study-button">Explore</button></Link>
+          </motion.div>
+          <motion.div 
+            className="study-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <button className="study-button">Education</button>
+            <p>Curated paths by education experts.</p>
+            <Link to="/courses"><button className="study-button">Explore</button></Link>
+          </motion.div>
+          <motion.div 
+            className="study-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <button className="study-button">Certificate</button>
+            <p>Earn credentials for career growth.</p>
+            <Link to="/courses"><button className="study-button">Explore</button></Link>
+          </motion.div>
+          <motion.div 
+            className="study-pace"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <h3>Study at Your Pace</h3>
+            <p>Advance your career with in-demand skills.</p>
+            <Link to="/courses"><button className="study-pace-button">Get Started</button></Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Testimonial Section */}
+      <section className="testimonial-section">
+        <motion.h2
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+        >
+          What Our Students Say
+        </motion.h2>
+        <div className="testimonial-grid">
+          <motion.div 
+            className="testimonial-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <p>"Mentor Craft launched my tech career in 6 months!"</p>
+            <div className="testimonial-author">
+              <img src={emma} alt="Emma Hart" />
+              <p>Emma Hart</p>
+            </div>
+          </motion.div>
+          <motion.div 
+            className="testimonial-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <p>"Incredible courses with expert instructors."</p>
+            <div className="testimonial-author">
+              <img src={eddie} alt="Eddie Johnson" />
+              <p>Eddie Johnson</p>
+            </div>
+          </motion.div>
+          <motion.div 
+            className="testimonial-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <p>"Doubled my salary with Data Science training."</p>
+            <div className="testimonial-author">
+              <img src={jonathan} alt="Jonathan Doe" />
+              <p>Jonathan Doe</p>
+            </div>
+          </motion.div>
+          <motion.div 
+            className="testimonial-card"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
+            <p>"Flexible schedule fit my work-life balance."</p>
+            <div className="testimonial-author">
+              <img src={laila} alt="Laila Lauway" />
+              <p>Laila Lauway</p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="newsletter-section">
+        <motion.h2
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+        >
+          Join Our Community
+        </motion.h2>
+        <motion.p
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+        >
+          Subscribe for the latest updates and offers.
+        </motion.p>
+        <motion.div 
+          className="newsletter-form"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+        >
+          <input type="email" placeholder="Enter Your Email" />
+          <button>Subscribe</button>
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-grid">
+          <motion.div 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+          >
+            <p className="footer-title">Mentor Craft</p>
+            <p>Empowering global learners with top education.</p>
+            <div className="footer-social">
+              <a href="#">Facebook</a>
+              <a href="#">Twitter</a>
+              <a href="#">Instagram</a>
+            </div>
+          </motion.div>
+          <motion.div 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
+          >
+            <p className="footer-title">Popular Courses</p>
+            <ul>
+              <li><Link to="/courses">Web Development</Link></li>
+              <li><Link to="/courses">Data Science</Link></li>
+              <li><Link to="/courses">Java Programming</Link></li>
+              <li><Link to="/courses">UI/UX Design</Link></li>
+              <li><Link to="/courses">Digital Marketing</Link></li>
+            </ul>
+          </motion.div>
+          <motion.div 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+          >
+            <p className="footer-title">Contact Info</p>
+            <p>Email: support@mentorcraft.com</p>
+            <p>Phone: +1 234 567 890</p>
+          </motion.div>
+        </div>
+        <p className="footer-copyright">© 2025 Mentor Craft. All rights reserved.</p>
+      </footer>
+    </motion.div>
   );
 };
 
