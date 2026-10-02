@@ -486,7 +486,7 @@ Make sure the following are installed:
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/nahalmalik/Final_Year_Project.git
+git clone https://github.com/nahalmalik/MentorCraft/.git
 
 cd Final_Year_Project
 ```
@@ -713,7 +713,7 @@ Contributions and suggestions are welcome.
 # Fork the repository
 
 # Clone your fork
-git clone https://github.com/nahalmalik/Final_Year_Project.git
+git clone https://github.com/nahalmalik/MentorCraft/.git
 
 # Create a feature branch
 git checkout -b feature/your-feature
@@ -745,7 +745,7 @@ Software Engineer
 If you find this project useful or interesting, consider giving the repository a ⭐ on GitHub.
 
 **Repository:**
-https://github.com/nahalmalik/Final_Year_Project
+https://github.com/nahalmalik/MentorCraft
 
 ---
 
